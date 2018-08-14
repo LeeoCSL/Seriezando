@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Seriezando</string>
+    <string name="voltar">U+003C</string>
 </resources>

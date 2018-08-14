@@ -6,13 +6,15 @@
         android:icon="@drawable/ic_menu_home"
         android:title="Inicio" />
 
-
     <item
         android:id="@+id/navigation_lista"
         android:icon="@drawable/ic_menu_lista"
         android:title="Lista"/>
 
-
+    <item
+        android:id="@+id/navigation_estat"
+        android:icon="@drawable/ic_menu_stat"
+        android:title="Estatisticas" />
 
     <item
         android:id="@+id/navigation_sair"

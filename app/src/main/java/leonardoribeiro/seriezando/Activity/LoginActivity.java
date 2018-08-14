@@ -81,6 +81,8 @@ public class LoginActivity extends AppCompatActivity {
             email = Paper.book().read("email");
             password = Paper.book().read("password");
             realizarLogin(email, password);
+        } else{
+            btn_google.performClick();
         }
 
         btn_google.setOnClickListener(new View.OnClickListener() {
