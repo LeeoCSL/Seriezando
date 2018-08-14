@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "981408097960",
+    "firebase_url": "https://seriezando-e097e.firebaseio.com",
+    "project_id": "seriezando-e097e",
+    "storage_bucket": "seriezando-e097e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981408097960:android:be28604a671a2fb3",
+        "android_client_info": {
+          "package_name": "leonardoribeiro.seriezando"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981408097960-se024924f2qlmtj6vh0hpprajr98k5s9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "leonardoribeiro.seriezando",
+            "certificate_hash": "13df5a721dd2ab24fd8afefef111e8558b6f27a1"
+          }
+        },
+        {
+          "client_id": "981408097960-2omsj1it9iid60vp3h03ms4vlknbq06e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBLsxlHKjSJar4m86Byz9zmeM9OhP8H_Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981408097960-2omsj1it9iid60vp3h03ms4vlknbq06e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
