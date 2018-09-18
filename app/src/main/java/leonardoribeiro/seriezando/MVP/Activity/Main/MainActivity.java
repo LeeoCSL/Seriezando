@@ -1,4 +1,4 @@
-package leonardoribeiro.seriezando.Activity;
+package leonardoribeiro.seriezando.MVP.Activity.Main;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -8,19 +8,39 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import io.paperdb.Paper;
 import leonardoribeiro.seriezando.Adapter.ViewPagerAdapter;
-import leonardoribeiro.seriezando.Fragments.EstatisticasFragment;
-import leonardoribeiro.seriezando.Fragments.HomeFragment;
-import leonardoribeiro.seriezando.Fragments.ListaFragment;
+import leonardoribeiro.seriezando.MVP.Fragments.Estatisticas.EstatisticasFragment;
+import leonardoribeiro.seriezando.MVP.Fragments.Home.HomeFragment;
+import leonardoribeiro.seriezando.MVP.Fragments.Lista.ListaFragment;
+import leonardoribeiro.seriezando.MVP.Activity.Login.LoginActivity;
 import leonardoribeiro.seriezando.R;
 import leonardoribeiro.seriezando.Util.BottomNavigationViewHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     public static ViewPager mViewPager;
+
+    @Override
+    protected void onStart() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(MainActivity.this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+
+        super.onStart();
+    }
+
     private BottomNavigationView navigation;
     private MenuItem prevMenuItem;
+    private GoogleApiClient mGoogleApiClient;
 
     private HomeFragment mHomeFragment;
     private ListaFragment mListaFragment;
@@ -42,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
                     mViewPager.setCurrentItem(2);
                     break;
                 case R.id.navigation_sair:
+                    if (mGoogleApiClient.isConnected()) {
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                    }
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     Paper.book().destroy();
                     break;

@@ -1,4 +1,4 @@
-package leonardoribeiro.seriezando.Fragments;
+package leonardoribeiro.seriezando.MVP.Fragments.Estatisticas;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,7 +28,7 @@ public class EstatisticasFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_lista, container, false);
+        view = inflater.inflate(R.layout.fragment_estatisticas, container, false);
 
 
         return view;

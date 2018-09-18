@@ -3,23 +3,26 @@
     package="leonardoribeiro.seriezando">
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.SplashScreen">
+        <activity android:name=".MVP.Activity.SplashScreen.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.RegisterActivity" />
-        <activity android:name=".Activity.MainActivity" />
-        <activity android:name=".Activity.InfoSerieActivity"></activity>
+        <activity android:name=".MVP.Activity.Login.LoginActivity" />
+        <activity android:name=".MVP.Activity.Register.RegisterActivity" />
+        <activity android:name=".MVP.Activity.Main.MainActivity" />
+        <activity android:name=".MVP.Activity.InfoSerie.InfoSerieActivity" />
+        <activity android:name=".MVP.Activity.Perfil.PerfilActivity" />
+        <activity android:name=".MVP.Activity.MinhaLista.MinhaListaActivity"></activity>
     </application>
 
 </manifest>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.InfoSerieActivity">
+    tools:context=".MVP.Activity.InfoSerie.InfoSerieActivity">
 
     <Button
         android:id="@+id/btn_voltar"
@@ -14,7 +14,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="#00000000"
-        android:text="@string/voltar"
+        android:text="&lt;"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -78,7 +78,7 @@
                 android:layout_marginTop="8dp"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut elementum dolor, a porta tellus. Nam non finibus erat, at rutrum urna. Fusce et tristique nunc. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer ornare, est sed."
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_titulo" />

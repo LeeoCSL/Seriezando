@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Serie implements Serializable{
 
 
-    private int id;
+    private String id;
     private String nome;
     private String descricao;
     private String foto;
@@ -15,7 +15,7 @@ public class Serie implements Serializable{
 
 
 
-    public Serie(int id, String nome, String descricao, String foto, float rate){
+    public Serie(String id, String nome, String descricao, String foto, float rate){
         this.id = id;
 
         this.nome = nome;
@@ -24,11 +24,11 @@ public class Serie implements Serializable{
         this.rate = rate;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -68,7 +68,7 @@ public class Serie implements Serializable{
     public String toString() {
         return "Série{" +
                 "nome='" + nome + '\'' +
-                "descroção='" + descricao + '\''+
+                "descrição='" + descricao + '\''+
                 "rate='" + rate + " estrelas" + '\'' +
                 '}';
     }

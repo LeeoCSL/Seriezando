@@ -8,7 +8,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".Activity.LoginActivity">
+    tools:context=".MVP.Activity.Login.LoginActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -103,6 +103,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/btn_registrar_se"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,13 +120,17 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/btn_google"
-        app:layout_constraintStart_toStartOf="@+id/btn_google"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         fancy:fb_borderColor="@color/white"
         fancy:fb_borderWidth="1dp"
         fancy:fb_defaultColor="@android:color/transparent"

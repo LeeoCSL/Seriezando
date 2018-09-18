@@ -4,7 +4,8 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/fundo_splash">
 
 
     <android.support.constraint.ConstraintLayout

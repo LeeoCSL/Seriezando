@@ -1,4 +1,4 @@
-package leonardoribeiro.seriezando.Fragments;
+package leonardoribeiro.seriezando.MVP.Fragments.Lista;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,22 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import leonardoribeiro.seriezando.Activity.InfoSerieActivity;
 import leonardoribeiro.seriezando.Adapter.ListaSeriesAdapter;
+import leonardoribeiro.seriezando.MVP.Activity.InfoSerie.InfoSerieActivity;
 import leonardoribeiro.seriezando.Models.Serie;
 import leonardoribeiro.seriezando.R;
 import leonardoribeiro.seriezando.dao.SeriesDAO;
 
 
-public class ListaFragment extends Fragment {
+public class ListaFragment extends Fragment{
 
     private View view;
 
     ListView listaSeries;
+
 
     public ListaFragment() {
     }
@@ -40,16 +42,10 @@ public class ListaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_lista, container, false);
-
-        configuraLista();
-
-
-        return view;
-    }
-
-    private void configuraLista() {
         listaSeries = view.findViewById(R.id.listaSeries);
-        final List<Serie> series = new SeriesDAO().lista();
+
+        final List<Serie> series = lista();
+
         listaSeries.setAdapter(new ListaSeriesAdapter(series, getContext()));
         listaSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -63,6 +59,22 @@ public class ListaFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        return view;
     }
+
+
+    public List<Serie> lista(){
+        List<Serie> series = new ArrayList<>(Arrays.asList(
+                new Serie("1", "Supernatural", "Descrição Supernatural", "logo", 5f ),
+                new Serie("2", "House MD.", "Descrição House MD.", "logo", 3f ),
+                new Serie("3", "Sons of Anarchy", "Descrição SoA", "logo", 2f ),
+                new Serie("4", "Lost", "Descrição Lost", "logo", 0f ),
+                new Serie("5", "How I Met Your Mother", "Descrição HIMYM", "logo", 1f )
+        ));
+        return series;
+    }
+
+
 
 }

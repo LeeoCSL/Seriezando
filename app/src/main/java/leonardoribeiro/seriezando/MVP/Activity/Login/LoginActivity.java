@@ -1,13 +1,11 @@
-package leonardoribeiro.seriezando.Activity;
+package leonardoribeiro.seriezando.MVP.Activity.Login;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -16,17 +14,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import io.paperdb.Paper;
+import leonardoribeiro.seriezando.MVP.Activity.Main.MainActivity;
+import leonardoribeiro.seriezando.MVP.Activity.Register.RegisterActivity;
 import leonardoribeiro.seriezando.R;
 import mehdi.sakout.fancybuttons.FancyButton;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements MVPLogin.View{
     private FirebaseAuth mAuth;
 
     FancyButton btn_login;
@@ -39,8 +38,14 @@ public class LoginActivity extends AppCompatActivity {
 
     String email, password;
 
+    MVPLogin.Presenter presenter = new LoginPresenter();
+
+    DatabaseReference databaseUser;
+
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
+
+
 
 
 
@@ -50,14 +55,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
 
-        btn_login = findViewById(R.id.btn_login);
-        et_email = findViewById(R.id.et_email);
-        et_senha = findViewById(R.id.et_senha);
-        btn_registrar_se = findViewById(R.id.btn_registrar_se);
-        btn_google = findViewById(R.id.btn_google);
-//        btn_facebook = findViewById(R.id.btn_facebook);
+        loadUI();
+        databaseUser = FirebaseDatabase.getInstance().getReference("usuarios");
 
-//        btn_facebook.setEnabled(false);
+        presenter.setActivity(this);
+        presenter.setView(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -76,11 +78,11 @@ public class LoginActivity extends AppCompatActivity {
         if(it.hasExtra("email") && it.hasExtra("password")){
             email = (String) it.getSerializableExtra("email");
             password = (String) it.getSerializableExtra("password");
-            realizarLogin(email, password);
+            presenter.loginClicado(email, password, mAuth);
         } else if(Paper.book().read("email")  != null && Paper.book().read("password") != null){
             email = Paper.book().read("email");
             password = Paper.book().read("password");
-            realizarLogin(email, password);
+            presenter.loginClicado(email, password, mAuth);
         } else{
             btn_google.performClick();
         }
@@ -114,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     email = et_email.getText().toString();
                     password = et_senha.getText().toString();
-                    realizarLogin(email, password);
+                    presenter.loginClicado(email, password, mAuth);
                 }
 
 
@@ -128,6 +130,17 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void loadUI() {
+        btn_login = findViewById(R.id.btn_login);
+        et_email = findViewById(R.id.et_email);
+        et_senha = findViewById(R.id.et_senha);
+        btn_registrar_se = findViewById(R.id.btn_registrar_se);
+        btn_google = findViewById(R.id.btn_google);
+//        btn_facebook = findViewById(R.id.btn_facebook);
+
+//        btn_facebook.setEnabled(false);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -138,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
+                presenter.firebaseAuthWithGoogle(account, mAuth);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]
@@ -148,29 +161,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        // [START_EXCLUDE silent]
 
-        // [END_EXCLUDE]
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        } else {
-                            // If sign in fails, display a message to the user.
-                        }
-
-                        // [START_EXCLUDE]
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -204,34 +195,18 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void realizarLogin(String email, String password) {
-        final String mail = email;
-        final String pass = password;
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(LoginActivity.this, "foi", Toast.LENGTH_SHORT).show();
-                            Log.d("login", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Paper.book().write("email", mail);
-                            Paper.book().write("password", pass);
 
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("login", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "nao foi",
-                                    Toast.LENGTH_SHORT).show();
-                        }
 
-                        // ...
-                    }
-                });
+    @Override
+    public void mostraErro(EditText et_campo, String mensagem) {
+        et_campo.setError(mensagem);
     }
 
+    @Override
+    public void loginFinalizado() {
+
+        startActivity(new Intent(this, MainActivity.class));
+    }
 
 
     @Override
