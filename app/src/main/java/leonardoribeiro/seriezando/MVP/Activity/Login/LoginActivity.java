@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,8 +24,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import io.paperdb.Paper;
 import leonardoribeiro.seriezando.MVP.Activity.Main.MainActivity;
 import leonardoribeiro.seriezando.MVP.Activity.Register.RegisterActivity;
+import leonardoribeiro.seriezando.Models.Usuario;
 import leonardoribeiro.seriezando.R;
+import leonardoribeiro.seriezando.RetrofitInit;
+import leonardoribeiro.seriezando.application.CustomApplication;
 import mehdi.sakout.fancybuttons.FancyButton;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements MVPLogin.View{
     private FirebaseAuth mAuth;
@@ -116,6 +124,8 @@ public class LoginActivity extends AppCompatActivity implements MVPLogin.View{
                 else{
                     email = et_email.getText().toString();
                     password = et_senha.getText().toString();
+
+
                     presenter.loginClicado(email, password, mAuth);
                 }
 
@@ -205,7 +215,31 @@ public class LoginActivity extends AppCompatActivity implements MVPLogin.View{
     @Override
     public void loginFinalizado() {
 
+        getInfosLogin();
+
         startActivity(new Intent(this, MainActivity.class));
+    }
+
+    private void getInfosLogin() {
+        //TODO pegar infos do bd
+        Log.v("aaaaaaaaa", CustomApplication.currentUser.getId());
+        Call<Usuario> call = new RetrofitInit(LoginActivity.this).getUsuarioService().getUser(CustomApplication.currentUser.getId());
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                if(response.body().getSeriesVistas() != null) {
+                    CustomApplication.currentUser.setSeriesVistas(response.body().getSeriesVistas());
+                }
+                Toast.makeText(LoginActivity.this, "pegou tudo", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "deu ruim", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
 

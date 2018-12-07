@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -14,7 +15,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import leonardoribeiro.seriezando.MVP.Activity.Login.LoginActivity;
 import leonardoribeiro.seriezando.Models.Usuario;
 import leonardoribeiro.seriezando.R;
+import leonardoribeiro.seriezando.RetrofitInit;
 import mehdi.sakout.fancybuttons.FancyButton;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity implements MVPRegister.View {
 
@@ -24,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity implements MVPRegister.V
 
     EditText et_email;
     EditText et_senha;
-    EditText et_nome;
+
 
     String email, password;
     private FirebaseAuth mAuth;
@@ -59,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity implements MVPRegister.V
         btn_cadastro = findViewById(R.id.btn_cadastro);
         et_email = findViewById(R.id.et_email);
         et_senha = findViewById(R.id.et_senha);
-        et_nome = findViewById(R.id.et_nome);
+
     }
 
     @Override
@@ -87,11 +92,23 @@ public class RegisterActivity extends AppCompatActivity implements MVPRegister.V
     public void cadastroFinalizado(String email, String senha) {
 
         Usuario usuario = new Usuario();
-        usuario.setEmail(email);
-        String id = databaseUser.push().getKey();
+        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         usuario.setId(id);
         usuario.setSeriesVistas(null);
         databaseUser.child(id).setValue(usuario);
+
+        Call<Usuario> call = new RetrofitInit(RegisterActivity.this).getUsuarioService().register(usuario);
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                Toast.makeText(RegisterActivity.this, "foi reg", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this, "nao foi reg", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         intent.putExtra("email", email);

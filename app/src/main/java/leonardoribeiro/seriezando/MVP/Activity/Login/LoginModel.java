@@ -2,6 +2,7 @@ package leonardoribeiro.seriezando.MVP.Activity.Login;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -11,6 +12,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import leonardoribeiro.seriezando.application.CustomApplication;
 
 public class LoginModel {
 
@@ -33,6 +36,8 @@ public class LoginModel {
                             FirebaseUser user = mAuth.getCurrentUser();
 //                            Paper.book().write("email", mail);
 //                            Paper.book().write("password", pass);
+
+                            CustomApplication.currentUser.setId(user.getUid());
                               presenter.loginRealizado();
 //                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
 //                        } else {

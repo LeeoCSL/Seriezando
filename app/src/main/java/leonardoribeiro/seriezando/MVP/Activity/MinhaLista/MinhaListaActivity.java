@@ -1,22 +1,13 @@
-package leonardoribeiro.seriezando.MVP.Fragments.Lista;
+package leonardoribeiro.seriezando.MVP.Activity.MinhaLista;
 
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import leonardoribeiro.seriezando.Adapter.ListaSeriesAdapter;
@@ -24,52 +15,46 @@ import leonardoribeiro.seriezando.MVP.Activity.InfoSerie.InfoSerieActivity;
 import leonardoribeiro.seriezando.Models.Serie;
 import leonardoribeiro.seriezando.R;
 import leonardoribeiro.seriezando.application.CustomApplication;
-import leonardoribeiro.seriezando.dao.SeriesDAO;
 
+public class MinhaListaActivity extends AppCompatActivity {
 
-public class ListaFragment extends Fragment{
-
-    private View view;
-    List<Serie> series;
+    Button btn_voltar;
     ListView listaSeries;
 
-    private DatabaseReference mDatabase;
-
-    public ListaFragment() {
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_minha_lista);
 
+        btn_voltar = findViewById(R.id.btn_voltar);
+        btn_voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
+        listaSeries = findViewById(R.id.listinha);
 
-    }
+//        final List<Serie> series = presenter.configuraLista();
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        view = inflater.inflate(R.layout.fragment_lista, container, false);
-        listaSeries = view.findViewById(R.id.listaSeries);
+//        listaSeries.setAdapter(new ListaSeriesAdapter(series, getContext()));
 
         final List<Serie> series = lista();
 
-        listaSeries.setAdapter(new ListaSeriesAdapter(series, getContext()));
+        listaSeries.setAdapter(new ListaSeriesAdapter(series, MinhaListaActivity.this));
         listaSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int posicao, long l) {
 
                 Serie serieClicada = series.get(posicao);
 
-                Intent intent = new Intent(getContext(),
+                Intent intent = new Intent(MinhaListaActivity.this,
                         InfoSerieActivity.class);
                 intent.putExtra("serie", serieClicada);
                 startActivity(intent);
             }
         });
-
-        return view;
     }
 
 
@@ -81,9 +66,7 @@ public class ListaFragment extends Fragment{
 //                new Serie(4, "Lost", "Descrição Lost", 0f ),
 //                new Serie(5, "How I Met Your Mother", "Descrição HIMYM", 1f )
 //        ));
-        return CustomApplication.getSeries();
+        return CustomApplication.currentUser.getSeriesVistas();
     }
-
-
 
 }

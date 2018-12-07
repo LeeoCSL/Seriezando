@@ -6,11 +6,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.List;
 
 import io.paperdb.Paper;
 import leonardoribeiro.seriezando.Adapter.ViewPagerAdapter;
@@ -18,8 +23,14 @@ import leonardoribeiro.seriezando.MVP.Fragments.Estatisticas.EstatisticasFragmen
 import leonardoribeiro.seriezando.MVP.Fragments.Home.HomeFragment;
 import leonardoribeiro.seriezando.MVP.Fragments.Lista.ListaFragment;
 import leonardoribeiro.seriezando.MVP.Activity.Login.LoginActivity;
+import leonardoribeiro.seriezando.Models.Serie;
 import leonardoribeiro.seriezando.R;
+import leonardoribeiro.seriezando.RetrofitInit;
 import leonardoribeiro.seriezando.Util.BottomNavigationViewHelper;
+import leonardoribeiro.seriezando.application.CustomApplication;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -88,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         BottomNavigationViewHelper.disableShiftMode(navigation);
@@ -120,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
         setupViewPager(mViewPager);
     }
+
+
 
 
     private void setupViewPager(ViewPager viewPager) {

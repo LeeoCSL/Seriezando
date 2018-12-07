@@ -1,24 +1,28 @@
 package leonardoribeiro.seriezando.MVP.Activity.InfoSerie;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 import leonardoribeiro.seriezando.MVP.Activity.Main.MainActivity;
 import leonardoribeiro.seriezando.Models.Serie;
+import leonardoribeiro.seriezando.Models.Usuario;
 import leonardoribeiro.seriezando.R;
-import leonardoribeiro.seriezando.Util.ResourcesUtil;
+import leonardoribeiro.seriezando.RetrofitInit;
+import leonardoribeiro.seriezando.application.CustomApplication;
+import leonardoribeiro.seriezando.dao.SeriesDAO;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class InfoSerieActivity extends AppCompatActivity {
 
@@ -27,8 +31,9 @@ public class InfoSerieActivity extends AppCompatActivity {
     TextView tv_desc;
     Button btn_voltar, btnJaVi;
 
-    List<String> seriesVistas;
+    List<Integer> listaAtualizada;
     Serie serie;
+    boolean vista = false;
 
     DatabaseReference databaseUser;
     @Override
@@ -39,14 +44,58 @@ public class InfoSerieActivity extends AppCompatActivity {
         loadUI();
         carregaSerieRecebida();
 
-        databaseUser = FirebaseDatabase.getInstance().getReference("usuarios");
+
 
 
 
         btnJaVi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseUser.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("seriesVistas").setValue(serie);
+                if(!vista){
+                    //TODO chamada incluir em vistas
+
+//                deleteUser();
+
+                CustomApplication.currentUser.addSerieVista(serie);
+                    Call<Usuario> call = new RetrofitInit(InfoSerieActivity.this).getUsuarioService().att(CustomApplication.currentUser.getId(), CustomApplication.currentUser);
+                    call.enqueue(new Callback<Usuario>() {
+                        @Override
+                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                            btnJaVi.setText("Retirar da minha lista");
+                            vista = true;
+                            Toast.makeText(InfoSerieActivity.this, "aq", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Usuario> call, Throwable t) {
+                            Toast.makeText(InfoSerieActivity.this, "ou aq", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }else if(vista){
+                    //TODO chamada retirar de vistas
+
+                    for(int c = 0; c < CustomApplication.currentUser.getSeriesVistas().size(); c++){
+                        if(CustomApplication.currentUser.getSeriesVistas().get(c).getId() == serie.getId()){
+                            CustomApplication.currentUser.removeSerieVista(c);
+                            break;
+                        }
+                    }
+
+                    Call<Usuario> call = new RetrofitInit(InfoSerieActivity.this).getUsuarioService().att(CustomApplication.currentUser.getId(), CustomApplication.currentUser);
+                    call.enqueue(new Callback<Usuario>() {
+                        @Override
+                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                            btnJaVi.setText("Incluir na minha lista");
+                            vista = true;
+                        }
+
+                        @Override
+                        public void onFailure(Call<Usuario> call, Throwable t) {
+
+                        }
+                    });
+                }
             }
         });
 
@@ -61,6 +110,24 @@ public class InfoSerieActivity extends AppCompatActivity {
 
 
 
+    private void deleteUser() {
+
+        Call<Usuario> call = new RetrofitInit(InfoSerieActivity.this).getUsuarioService().deleteUser(CustomApplication.currentUser.getId());
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
     private void loadUI() {
         img_serie = findViewById(R.id.img_serie);
         tv_titulo = findViewById(R.id.tv_titulo);
@@ -72,11 +139,16 @@ public class InfoSerieActivity extends AppCompatActivity {
     private void carregaSerieRecebida() {
         Intent intent = getIntent();
         if(intent.hasExtra("serie")){
-            serie= (Serie) intent.getSerializableExtra("serie");
+            serie = (Serie) intent.getSerializableExtra("serie");
 
             inicializaCampos(serie);
 
 
+
+
+        }else{
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
         }
 
 
@@ -87,12 +159,23 @@ public class InfoSerieActivity extends AppCompatActivity {
         mostraNome(serie);
         mostraDesc(serie);
         mostraFoto(serie);
+        if(!CustomApplication.currentUser.getSeriesVistas().isEmpty()) {
+            for (int i = 0; i < CustomApplication.currentUser.getSeriesVistas().size(); i++) {
+                if (serie.getId() == CustomApplication.currentUser.getSeriesVistas().get(i).getId()) {
+                    btnJaVi.setText("Retirar da minha lista");
+                    vista = true;
+                    break;
+                }
+            }
+        }
     }
 
-    private void mostraFoto(Serie serie) {
 
-        Drawable drawableDoPacote = ResourcesUtil.devolveDrawable(this, serie.getFoto());
-        img_serie.setImageDrawable(drawableDoPacote);
+
+    private void mostraFoto(Serie serie) {
+        //TODO array fotos por indice igual das series
+//        img_serie.setBackgroundResource(R.drawable.btn_only_border);
+        img_serie.setBackgroundResource(SeriesDAO.getImages()[serie.getId() - 1]);
     }
 
     private void mostraDesc(Serie serie) {

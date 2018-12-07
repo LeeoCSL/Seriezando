@@ -15,6 +15,8 @@ import java.util.List;
 import leonardoribeiro.seriezando.Models.Serie;
 import leonardoribeiro.seriezando.R;
 import leonardoribeiro.seriezando.Util.ResourcesUtil;
+import leonardoribeiro.seriezando.dao.SeriesDAO;
+
 
 public class ListaSeriesAdapter extends BaseAdapter {
 
@@ -69,8 +71,10 @@ public class ListaSeriesAdapter extends BaseAdapter {
 
     private void mostraImagem(View viewCriada, Serie serie) {
         ImageView imagem = viewCriada.findViewById(R.id.lv_imagem);
-        Drawable drawableImagemPacote = ResourcesUtil.devolveDrawable(context, serie.getFoto());
-        imagem.setImageDrawable(drawableImagemPacote);
+//        Drawable drawableImagemPacote = ResourcesUtil.devolveDrawable(context, SeriesDAO.getImages()[serie.getId()-1]);
+//        imagem.setImageDrawable(drawableImagemPacote);
+//        imagem.setBackgroundResource(R.drawable.btn_only_border);
+        imagem.setBackgroundResource(SeriesDAO.getImages()[serie.getId() - 1]);
     }
 
 

@@ -24,7 +24,7 @@ public class HomeFragment extends Fragment {
 
     private View view;
     Button btn_lista_de_series;
-    Button btn_perfil;
+
     Button btn_minha_lista;
     Button btn_estatisticas;
 
@@ -49,16 +49,10 @@ public class HomeFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
         btn_lista_de_series = view.findViewById(R.id.btn_lista_de_series);
-        btn_perfil = view.findViewById(R.id.btn_perfil);
         btn_minha_lista = view.findViewById(R.id.btn_minha_lista);
         btn_estatisticas = view.findViewById(R.id.btn_estatisticas);
 
-        btn_perfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), PerfilActivity.class));
-            }
-        });
+
 
         btn_minha_lista.setOnClickListener(new View.OnClickListener() {
             @Override

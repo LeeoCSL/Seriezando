@@ -5,30 +5,27 @@ import java.io.Serializable;
 public class Serie implements Serializable{
 
 
-    private String id;
+    private int id;
     private String nome;
     private String descricao;
-    private String foto;
     private float rate;
 
     public Serie(){}
 
 
 
-    public Serie(String id, String nome, String descricao, String foto, float rate){
+    public Serie(int id, String nome, String descricao, float rate){
         this.id = id;
-
         this.nome = nome;
         this.descricao = descricao;
-        this.foto = foto;
         this.rate = rate;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -48,13 +45,7 @@ public class Serie implements Serializable{
         this.descricao = descricao;
     }
 
-    public String getFoto() {
-        return foto;
-    }
 
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
 
     public float getRate() {
         return rate;

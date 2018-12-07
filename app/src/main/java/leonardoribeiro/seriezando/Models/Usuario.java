@@ -1,14 +1,15 @@
 package leonardoribeiro.seriezando.Models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Usuario implements Serializable {
 
 
 
-    List<Integer> seriesVistas;
-    String email;
+    List<Serie> seriesVistas = new ArrayList<>();
+
     String id;
 
     public Usuario(){}
@@ -21,25 +22,19 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List getSeriesVistas() {
+    public List<Serie> getSeriesVistas() {
         return seriesVistas;
     }
 
-    public void setSeriesVistas(List<Integer> seriesVistas) {
+    public void setSeriesVistas(List<Serie> seriesVistas) {
         this.seriesVistas = seriesVistas;
     }
 
-    public void addTeste(){
-        seriesVistas.add(1);
+    public void addSerieVista(Serie serie){
+        seriesVistas.add(serie);
+    }
+
+    public void removeSerieVista(int i){
+        seriesVistas.remove(i);
     }
 }

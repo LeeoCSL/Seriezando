@@ -8,6 +8,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import leonardoribeiro.seriezando.application.CustomApplication;
+
 public class RegisterModel {
 
     MVPRegister.Presenter presenter;
@@ -29,6 +31,7 @@ public class RegisterModel {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
+                            CustomApplication.currentUser.setId(user.getUid());
                             presenter.cadastroFeito(mail, pass);
 //                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
 //                            intent.putExtra("email", mail);
